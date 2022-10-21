@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebFormsUvod", "WebFormsUvod\WebFormsUvod.csproj", "{D9E08609-3DF3-4E47-9D11-8B6E7070D3BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateManagementProjekt", "StateManagementProjekt\StateManagementProjekt.csproj", "{F51FD8F7-62A6-4252-9D0C-1FEBD64DC62C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D9E08609-3DF3-4E47-9D11-8B6E7070D3BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9E08609-3DF3-4E47-9D11-8B6E7070D3BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9E08609-3DF3-4E47-9D11-8B6E7070D3BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9E08609-3DF3-4E47-9D11-8B6E7070D3BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F51FD8F7-62A6-4252-9D0C-1FEBD64DC62C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F51FD8F7-62A6-4252-9D0C-1FEBD64DC62C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F51FD8F7-62A6-4252-9D0C-1FEBD64DC62C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F51FD8F7-62A6-4252-9D0C-1FEBD64DC62C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {889B21F8-803F-4951-AF89-02BFCC8552F8}
+	EndGlobalSection
+EndGlobal
