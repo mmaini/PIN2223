@@ -18,28 +18,30 @@ namespace WebAPIDemo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class VillaAPIController : ControllerBase
+    public class VillaNumberAPIController : ControllerBase
     {
+        private readonly IVillaNumberRepository _dbVillaNumber;
         private readonly IVillaRepository _dbVilla;
-        private readonly ILogger<VillaAPIController> _logger;
+        private readonly ILogger<VillaNumberAPIController> _logger;
         private readonly IMapper _mapper;
 
-        public VillaAPIController(ILogger<VillaAPIController> logger, IVillaRepository dbVilla, IMapper mapper)
+        public VillaNumberAPIController(ILogger<VillaNumberAPIController> logger, IVillaNumberRepository dbVillaNumber, IMapper mapper, IVillaRepository dbVilla)
         {
             _logger = logger;
-            _dbVilla = dbVilla;
+            _dbVillaNumber = dbVillaNumber;
             _mapper = mapper;
+            _dbVilla = dbVilla;
         }
 
         [HttpGet]
-        public async Task<ActionResult<APIResponse>> GetVillas()
+        public async Task<ActionResult<APIResponse>> GetVillaNumbers()
         {
-            _logger.LogInformation("Getting all villas");
+            _logger.LogInformation("Getting all villa numbers");
             APIResponse response = new();
             try
             {
-                IEnumerable<Villa> villaList = await _dbVilla.GetAll();
-                response.Result = _mapper.Map<List<VillaDto>>(villaList);
+                IEnumerable<VillaNumber> villaList = await _dbVillaNumber.GetAll();
+                response.Result = _mapper.Map<List<VillaNumberDto>>(villaList);
                 response.StatusCode = HttpStatusCode.OK;
             }
             catch(Exception ex)
@@ -51,8 +53,8 @@ namespace WebAPIDemo.Controllers
             return response;
         }
 
-        [HttpGet("{id:int}", Name ="GetVilla")]
-        public async Task<ActionResult<APIResponse>> GetVilla(int id)
+        [HttpGet("{id:int}", Name = "GetVillaNumber")]
+        public async Task<ActionResult<APIResponse>> GetVillaNumber(int id)
         {
             APIResponse response = new();
             try
@@ -65,16 +67,16 @@ namespace WebAPIDemo.Controllers
                 }
                 else
                 {
-                    var villa = await _dbVilla.Get(x => x.Id == id);
-                    if (villa == null)
+                    var villaNumber = await _dbVillaNumber.Get(x => x.VillaNo == id);
+                    if (villaNumber == null)
                     {
                         response.IsSuccess = false;
                         response.StatusCode = HttpStatusCode.NotFound;
-                        response.ErrorMessages.Add("Villa ne postoji");
+                        response.ErrorMessages.Add("VillaNumber ne postoji");
                     }
                     else
                     {
-                        response.Result = _mapper.Map<VillaDto>(villa);
+                        response.Result = _mapper.Map<VillaNumberDto>(villaNumber);
                         response.StatusCode = HttpStatusCode.OK;
                     }               
                 }          
@@ -89,12 +91,12 @@ namespace WebAPIDemo.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<APIResponse>> CreateVilla([FromBody] VillaCreateDto villaDto)
+        public async Task<ActionResult<APIResponse>> CreateVillaNumber([FromBody] VillaNumberCreateDto villaNumberDto)
         {
             APIResponse response = new();
             try
             {
-                if (!ModelState.IsValid || villaDto == null)
+                if (!ModelState.IsValid || villaNumberDto == null)
                 {
                     response.IsSuccess = false;
                     response.StatusCode = HttpStatusCode.BadRequest;
@@ -102,11 +104,19 @@ namespace WebAPIDemo.Controllers
                 }
                 else
                 {
-                    Villa villa = _mapper.Map<Villa>(villaDto);
-                    villa.CreatedDate = DateTime.Now;
-                    await _dbVilla.Create(villa);
-
-                    response.StatusCode = HttpStatusCode.Created;
+                    if(await _dbVilla.Get(x=> x.Id == villaNumberDto.VillaID) == null)
+                    {
+                        response.IsSuccess = false;
+                        response.StatusCode = HttpStatusCode.BadRequest;
+                        response.ErrorMessages.Add("Villa ne postoji");
+                    }
+                    else
+                    {
+                        VillaNumber villaNumber = _mapper.Map<VillaNumber>(villaNumberDto);
+                        villaNumber.CreatedDate = DateTime.Now;
+                        await _dbVillaNumber.Create(villaNumber);
+                        response.StatusCode = HttpStatusCode.Created;
+                    }               
                 }
             }
             catch (Exception ex)
@@ -120,7 +130,7 @@ namespace WebAPIDemo.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult<APIResponse>> DeleteVilla(int id)
+        public async Task<ActionResult<APIResponse>> DeleteVillaNumber(int id)
         {
             APIResponse response = new();
             try
@@ -133,8 +143,8 @@ namespace WebAPIDemo.Controllers
                 }
                 else
                 {
-                    var villa = await _dbVilla.Get(x => x.Id == id);
-                    if (villa == null)
+                    var villaNumber = await _dbVillaNumber.Get(x => x.VillaNo == id);
+                    if (villaNumber == null)
                     {
                         response.IsSuccess = false;
                         response.StatusCode = HttpStatusCode.NotFound;
@@ -142,7 +152,7 @@ namespace WebAPIDemo.Controllers
                     }
                     else
                     {
-                        await _dbVilla.Remove(villa);
+                        await _dbVillaNumber.Remove(villaNumber);
                         response.StatusCode = HttpStatusCode.NoContent;
                     }
                 }                   
@@ -157,13 +167,13 @@ namespace WebAPIDemo.Controllers
             return response;
         }
 
-        [HttpPut("{id:int}", Name = "UpdateVilla")]
-        public async Task<ActionResult<APIResponse>> UpdateVilla(int id, [FromBody]VillaUpdateDto villaDto)
+        [HttpPut("{id:int}", Name = "UpdateVillaNumber")]
+        public async Task<ActionResult<APIResponse>> UpdateVillaNumber(int id, [FromBody]VillaNumberUpdateDto villaUpdateDto)
         {
             APIResponse response = new();
             try
             {
-                if (villaDto == null || villaDto.Id != id)
+                if (villaUpdateDto == null || villaUpdateDto.VillaNo != id)
                 {
                     response.IsSuccess = false;
                     response.StatusCode = HttpStatusCode.BadRequest;
@@ -171,20 +181,29 @@ namespace WebAPIDemo.Controllers
                 }
                 else
                 {
-                    var villa = await _dbVilla.Get(x => x.Id == id, false);
-                    if (villa == null)
+                    if (await _dbVilla.Get(x => x.Id == villaUpdateDto.VillaID) == null)
                     {
                         response.IsSuccess = false;
-                        response.StatusCode = HttpStatusCode.NotFound;
+                        response.StatusCode = HttpStatusCode.BadRequest;
                         response.ErrorMessages.Add("Villa ne postoji");
                     }
                     else
                     {
-                        villa = _mapper.Map<Villa>(villaDto);
-                        villa.UpdatedDate = DateTime.Now;
-                        await _dbVilla.Update(villa);
-                        response.StatusCode = HttpStatusCode.NoContent;
+                        var villaNumber = await _dbVillaNumber.Get(x => x.VillaNo == id, false);
+                        if (villaNumber == null)
+                        {
+                            response.IsSuccess = false;
+                            response.StatusCode = HttpStatusCode.NotFound;
+                            response.ErrorMessages.Add("VillaNumber ne postoji");
+                        }
+                        else
+                        {
+                            villaNumber = _mapper.Map<VillaNumber>(villaUpdateDto);
+                            await _dbVillaNumber.Update(villaNumber);
+                            response.StatusCode = HttpStatusCode.NoContent;
+                        }
                     }
+                 
                 }
             }            
             catch(Exception ex)

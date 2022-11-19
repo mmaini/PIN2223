@@ -19,7 +19,7 @@ namespace WebAPIDemo.Repository
             _dbset = _db.Set<T>();
         }
 
-        public async Task Create(T entity)
+        public async Task Create(T entity)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
         {
             await _dbset.AddAsync(entity);
             await Save();

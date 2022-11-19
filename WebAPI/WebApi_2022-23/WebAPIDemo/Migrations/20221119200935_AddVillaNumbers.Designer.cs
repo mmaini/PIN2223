@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebAPIDemo.Data;
 
 namespace WebAPIDemo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221119200935_AddVillaNumbers")]
+    partial class AddVillaNumbers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,7 +64,7 @@ namespace WebAPIDemo.Migrations
                         {
                             Id = 1,
                             Amenity = "",
-                            CreatedDate = new DateTime(2022, 11, 19, 22, 23, 1, 877, DateTimeKind.Local).AddTicks(9099),
+                            CreatedDate = new DateTime(2022, 11, 19, 21, 9, 34, 747, DateTimeKind.Local).AddTicks(6952),
                             Details = "Odlična villa",
                             ImageUrl = "",
                             Name = "Belvedere",
@@ -75,7 +77,7 @@ namespace WebAPIDemo.Migrations
                         {
                             Id = 2,
                             Amenity = "",
-                            CreatedDate = new DateTime(2022, 11, 19, 22, 23, 1, 877, DateTimeKind.Local).AddTicks(9355),
+                            CreatedDate = new DateTime(2022, 11, 19, 21, 9, 34, 747, DateTimeKind.Local).AddTicks(7216),
                             Details = "Obiteljska villa",
                             ImageUrl = "",
                             Name = "Lungomare",
@@ -100,25 +102,9 @@ namespace WebAPIDemo.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("VillaID")
-                        .HasColumnType("int");
-
                     b.HasKey("VillaNo");
 
-                    b.HasIndex("VillaID");
-
                     b.ToTable("VillaNumbers");
-                });
-
-            modelBuilder.Entity("WebAPIDemo.Models.VillaNumber", b =>
-                {
-                    b.HasOne("WebAPIDemo.Models.Villa", "Villa")
-                        .WithMany()
-                        .HasForeignKey("VillaID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Villa");
                 });
 #pragma warning restore 612, 618
         }
