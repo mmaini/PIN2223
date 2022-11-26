@@ -10,8 +10,8 @@ namespace Demo.Data
     {
         public static List<VillaDto> VillaList = new List<VillaDto>()
             {
-                new VillaDto{Id=1, Name="Villa1"},
-                new VillaDto{Id=2, Name="Villa2"},
+                new VillaDto{Id=1, Name="Villa1", Occupancy=4, Sqft=50},
+                new VillaDto{Id=2, Name="Villa2", Occupancy=3, Sqft=40},
             };
     }
 }

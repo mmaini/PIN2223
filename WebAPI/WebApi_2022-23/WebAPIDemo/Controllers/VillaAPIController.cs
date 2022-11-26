@@ -198,33 +198,33 @@ namespace WebAPIDemo.Controllers
 
 
         #region NotUsed
-        //[HttpPatch("{id:int}", Name = "UpdatePartialVilla")]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //public async Task<IActionResult> UpdatePartialVilla(int id, JsonPatchDocument<VillaUpdateDto> patchDto)
-        //{
-        //    if (patchDto == null || id==0) return BadRequest();
-        //    //ne želimo pratiti ovaj objekt jer u update-u šaljemo izmijenjeni
-        //    var villa = await _dbVilla.Get(x => x.Id == id, false);
+        [HttpPatch("{id:int}", Name = "UpdatePartialVilla")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdatePartialVilla(int id, JsonPatchDocument<VillaUpdateDto> patchDto)
+        {
+            if (patchDto == null || id == 0) return BadRequest();
+            //ne želimo pratiti ovaj objekt jer u update-u šaljemo izmijenjeni
+            var villa = await _dbVilla.Get(x => x.Id == id, false);
 
-        //    if (villa == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (villa == null)
+            {
+                return NotFound();
+            }
 
-        //    //moramo kreirati dto za patch
-        //    VillaUpdateDto villaDto = _mapper.Map<VillaUpdateDto>(villa);
+            //moramo kreirati dto za patch
+            VillaUpdateDto villaDto = _mapper.Map<VillaUpdateDto>(villa);
 
-        //    patchDto.ApplyTo(villaDto, ModelState);
-        //    if (!ModelState.IsValid) return BadRequest(ModelState);
+            patchDto.ApplyTo(villaDto, ModelState);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        //    villa = _mapper.Map<Villa>(villaDto);
-        //    villa.UpdatedDate = DateTime.Now;
+            villa = _mapper.Map<Villa>(villaDto);
+            villa.UpdatedDate = DateTime.Now;
 
-        //    await _dbVilla.Update(villa);
-        //    return NoContent();
-        //}
+            await _dbVilla.Update(villa);
+            return NoContent();
+        }
 
         #endregion
 
