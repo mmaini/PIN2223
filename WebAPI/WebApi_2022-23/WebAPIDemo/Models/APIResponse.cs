@@ -17,6 +17,7 @@ namespace WebAPIDemo.Models
         {
             ErrorMessages = new List<string>();
             IsSuccess = true;
+            StatusCode = HttpStatusCode.OK;
         }
     }
 }

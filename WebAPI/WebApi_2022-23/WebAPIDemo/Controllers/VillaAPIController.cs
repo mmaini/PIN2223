@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,7 @@ namespace WebAPIDemo.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<APIResponse>> GetVillas()
         {
             _logger.LogInformation("Getting all villas");
@@ -52,6 +54,7 @@ namespace WebAPIDemo.Controllers
         }
 
         [HttpGet("{id:int}", Name ="GetVilla")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<APIResponse>> GetVilla(int id)
         {
             APIResponse response = new();
@@ -89,6 +92,7 @@ namespace WebAPIDemo.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles ="Admin")]
         public async Task<ActionResult<APIResponse>> CreateVilla([FromBody] VillaCreateDto villaDto)
         {
             APIResponse response = new();
@@ -120,6 +124,7 @@ namespace WebAPIDemo.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<APIResponse>> DeleteVilla(int id)
         {
             APIResponse response = new();
