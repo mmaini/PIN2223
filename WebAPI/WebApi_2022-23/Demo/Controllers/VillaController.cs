@@ -1,12 +1,13 @@
-﻿using Demo.Data;
+﻿using AutoMapper;
 using Demo.Models;
 using Demo.Models.Dto;
-using Microsoft.AspNetCore.JsonPatch;
+using Demo.Repository.IRepository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace Demo.Controllers
 {
@@ -14,75 +15,177 @@ namespace Demo.Controllers
     [ApiController]
     public class VillaController : ControllerBase
     {
+        private readonly IVillaRepository _dbVilla;
         private readonly ILogger<VillaController> _logger;
-        public VillaController(ILogger<VillaController> logger)
+        private readonly IMapper _mapper;
+
+        public VillaController(ILogger<VillaController> logger, IVillaRepository dbVilla, IMapper mapper)
         {
             _logger = logger;
+            _dbVilla = dbVilla;
+            _mapper = mapper;
         }
-
 
         [HttpGet]
-        public ActionResult GetVillas()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> GetVillas()
         {
-            _logger.LogInformation("Pozvana je metoda GetVillas");
-            return Ok(VillaStore.VillaList);
+            _logger.LogInformation("Poziv GetVillas");
+            try
+            {
+                IEnumerable<Villa> villaList = await _dbVilla.GetAll();
+                return Ok(_mapper.Map<List<VillaDto>>(villaList));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Došlo je do pogreške: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Molimo kontaktirajte administratora");
+            }
         }
 
-        [HttpGet("{id:int}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        public ActionResult GetVilla(int id)
+        [HttpGet("{id:int}", Name = "GetVilla")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> GetVilla(int id)
         {
-            if (id == 0) return BadRequest();
-            VillaDto villa = VillaStore.VillaList.FirstOrDefault(x => x.Id == id);
-            if (villa == null) return NotFound();
-
-            return Ok(villa);
+            _logger.LogInformation($"Poziv GetVilla. Id = {id}");
+            try
+            {
+                if (id == 0)
+                {
+                    _logger.LogError("Id nije dobar");
+                    return BadRequest("Id nije dobar");
+                }
+                else
+                {
+                    var villa = await _dbVilla.Get(x => x.Id == id);
+                    if (villa == null)
+                    {
+                        _logger.LogError("Villa ne postoji");
+                        return NotFound("Villa ne postoji");
+                    }
+                    else
+                    {
+                        return Ok(_mapper.Map<VillaDto>(villa));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Došlo je do pogreške: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Molimo kontaktirajte administratora");
+            }
+            
         }
 
         [HttpPost]
-        public ActionResult CreateVilla([FromBody] VillaDto villa)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> CreateVilla([FromBody] VillaCreateDto villaDto)
         {
-            if (villa == null) return BadRequest();
-            villa.Id = VillaStore.VillaList.OrderByDescending(x => x.Id).FirstOrDefault().Id + 1;
-            VillaStore.VillaList.Add(villa);
-            return Ok(villa);
+            _logger.LogInformation("Poziv CreateVilla.");
+            try
+            {
+                if (!ModelState.IsValid || villaDto == null)
+                {
+                    _logger.LogError("Model nije dobar");
+                    return BadRequest("Model nije dobar");
+                }
+                else
+                {
+                    Villa villa = _mapper.Map<Villa>(villaDto);
+                    villa.CreatedDate = DateTime.Now;
+                    await _dbVilla.Create(villa);
+                    return Ok(_mapper.Map<VillaDto>(villa));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Došlo je do pogreške: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Molimo kontaktirajte administratora");
+
+            }
         }
 
-        [HttpDelete]
-        public ActionResult DeleteVilla(int id)
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeleteVilla(int id)
         {
-            if (id == 0) return BadRequest();
-            VillaDto villa = VillaStore.VillaList.FirstOrDefault(x => x.Id == id);
-            if (villa == null) return NotFound();
+            _logger.LogInformation($"Poziv DeleteVilla. Id = {id}");
+            try
+            {
+                if (id == 0)
+                {
+                    _logger.LogError("Id nije dobar");
+                    return BadRequest("Id nije dobar");
+                }
+                else
+                {
+                    var villa = await _dbVilla.Get(x => x.Id == id);
+                    if (villa == null)
+                    {
+                        _logger.LogError("Villa ne postoji");
+                        return NotFound("Villa ne postoji");
+                    }
+                    else
+                    {
+                        await _dbVilla.Remove(villa);
+                        return NoContent();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Došlo je do pogreške: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Molimo kontaktirajte administratora");
+            }
 
-            VillaStore.VillaList.Remove(villa);
-            return NoContent();
         }
 
-        [HttpPut("{id:int}")]
-        public ActionResult UpdateVilla(int id, [FromBody]VillaDto villa)
+        [HttpPut("{id:int}", Name = "UpdateVilla")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> UpdateVilla(int id, [FromBody] VillaUpdateDto villaDto)
         {
-            if (villa == null || id != villa.Id) return BadRequest();
-            VillaDto v = VillaStore.VillaList.FirstOrDefault(x => x.Id == id);
-            if (v == null) return NotFound();
-            v.Occupancy = villa.Occupancy;
-            v.Name = villa.Name;
-            v.Sqft = villa.Sqft;
-            
-            return NoContent();
-
-        }
-
-        [HttpPatch("{id:int}")]
-        public ActionResult UpdatePartialUpdate(int id, JsonPatchDocument<VillaDto> villaDto)
-        {
-            VillaDto v = VillaStore.VillaList.FirstOrDefault(x => x.Id == id);
-            villaDto.ApplyTo(v, ModelState);
-            if (!ModelState.IsValid) return BadRequest();
-
-            return NoContent();
+            _logger.LogInformation($"Poziv UpdateVilla. Id = {id}");
+            try
+            {
+                if (villaDto == null || villaDto.Id != id)
+                {
+                    _logger.LogError("Id nije dobar");
+                    return BadRequest("Id nije dobar");
+                }
+                else
+                {
+                    var villa = await _dbVilla.Get(x => x.Id == id, false);
+                    if (villa == null)
+                    {
+                        _logger.LogError("Villa ne postoji");
+                        return NotFound("Villa ne postoji");
+                    }
+                    else
+                    {
+                        villa = _mapper.Map<Villa>(villaDto);
+                        villa.UpdatedDate = DateTime.Now;
+                        await _dbVilla.Update(villa);
+                        return NoContent();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Došlo je do pogreške: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Molimo kontaktirajte administratora");
+            }
         }
 
     }
