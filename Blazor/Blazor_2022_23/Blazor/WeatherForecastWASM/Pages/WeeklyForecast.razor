@@ -1,0 +1,17 @@
+﻿@page "/WeeklyForecast"
+
+
+<h3>Weekly Forecast</h3>
+
+<div class="d-flex">
+
+    @foreach(var item in Enumerable.Range(1,5))
+    {
+        <WheaterDay Temperature="20" Summary="Cloudy" DayOfWeek="DayOfWeek.Friday"/>
+    }
+
+</div>
+
+@code {
+
+}

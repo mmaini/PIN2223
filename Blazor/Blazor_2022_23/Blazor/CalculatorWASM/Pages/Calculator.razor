@@ -1,0 +1,79 @@
+﻿@page "/calculator"
+
+<h1>Calculator Demo</h1>
+
+<hr />
+
+<div>
+    <div class="row">
+        <div class="column-sm-3">
+            <p>First number</p>
+        </div>
+        <div class="col-sm-4">
+            <input placeholder="Enter first number" @bind="num1" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="column-sm-3">
+            <p>Second number</p>
+        </div>
+        <div class="col-sm-4">
+            <input placeholder="Enter second number" @bind="num2" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="column-sm-3">
+            <p>Result</p>
+        </div>
+        <div class="col-sm-4">
+            <input readonly @bind="finalResult" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-2">
+            <button @onclick="AddNumbers" class="btn btn-info">Add (+)</button>
+        </div>
+        <div class="col-sm-2">
+            <button @onclick="SubtractNumbers" class="btn btn-primary">Subtract (-)</button>
+        </div>
+        <div class="col-sm-2">
+            <button @onclick="MultiplyNumbers" class="btn btn-success">Multiply (*)</button>
+        </div>
+        <div class="col-sm-2">
+            <button @onclick="DivideNumbers" class="btn btn-info">Divide (/)</button>
+        </div>
+    </div>
+
+    </div>
+
+    @code {
+        string num1 = "";
+        string num2 = "";
+        string finalResult = "";
+
+        private void AddNumbers()
+        {
+            finalResult = (Convert.ToDouble(num1) + Convert.ToDouble(num2)).ToString();
+        }
+        private void SubtractNumbers()
+        {
+            finalResult = (Convert.ToDouble(num1) - Convert.ToDouble(num2)).ToString();
+        }
+        private void MultiplyNumbers()
+        {
+            finalResult = (Convert.ToDouble(num1) * Convert.ToDouble(num2)).ToString();
+        }
+        private void DivideNumbers()
+        {
+            if(Convert.ToDouble(num2)!=0)
+            {
+                finalResult = (Convert.ToDouble(num1) / Convert.ToDouble(num2)).ToString();
+            }
+            else
+            {
+                finalResult = "Cannot divide by zero";
+            }
+
+        }
+    }

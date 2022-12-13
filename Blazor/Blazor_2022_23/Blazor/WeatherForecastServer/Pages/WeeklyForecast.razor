@@ -1,0 +1,56 @@
+﻿@page "/WeeklyForecast"
+@using Data;
+@inject WeatherForecastService WeatherService 
+
+
+<h3>Weekly Forecast</h3>
+
+<div class="d-flex">
+
+    @if (forecasts == null)
+    {
+        <span>No data</span>
+    }
+    else
+    {
+        @foreach (var forecast in forecasts)
+        {
+            <WheaterDay Temperature="forecast.TemperatureC"
+                        Summary="@forecast.Summary"
+                        DayOfWeek="forecast.Date.DayOfWeek" 
+                        OnSelected="HandleItemSelected"
+                        Selected="forecast.Selected" >
+                <CustomMessage>
+                    @if(forecast.Summary=="Rainy")
+                {
+                    <div class="alert alert-danger">
+                        Tornado warning!
+                    </div>
+                }
+                </CustomMessage>
+            </WheaterDay>                                                                 
+        }
+    }
+
+</div>
+
+@code {
+
+    WeatherForecast[] forecasts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await WeatherService.GetForecastAsync(DateTime.Now);
+    }
+
+    void HandleItemSelected(DayOfWeek selectedValue)
+    {
+        foreach(var item in forecasts)
+        {
+            item.Selected = false;
+        }
+
+        forecasts.First(x => x.Date.DayOfWeek == selectedValue).Selected = true;
+    }
+
+}

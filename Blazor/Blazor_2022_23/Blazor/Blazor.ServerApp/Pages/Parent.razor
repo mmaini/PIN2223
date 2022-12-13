@@ -1,0 +1,23 @@
+﻿@page "/parent"
+@page "/parent/{firstName}"
+
+<h3>Welcome @firstName</h3>
+
+<h1>@WelcomeMessage</h1>
+
+<input @bind="CurrentValue" @bind:event="oninput"/>
+<span>
+    Unos: @CurrentValue
+</span>
+
+@code {
+
+    [Parameter]
+    public string firstName { get; set; }
+
+    public string WelcomeMessage { get; set; } = "Dobrodošli na Blazor";
+
+    [Parameter]
+    public int CurrentValue { get; set; } = 0;
+
+}
