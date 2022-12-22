@@ -1,0 +1,35 @@
+﻿@page "/"
+
+
+    @if (tasks == null)
+    {
+        <p><em>Učitavanje</em></p>
+    }
+    else
+    {
+        <h3>Za obaviti: (@tasks.Count(todo => !todo.IsDone)) </h3>
+
+        <input placeholder="Stvari za obaviti" @bind="newTodo"/>
+        <button class="btn btn-success" @onclick="AddTask">Dodaj</button>
+
+
+        <ul>
+            @foreach (var todo in tasks)
+            {
+            <li>
+
+                <input type="checkbox" checked="@todo.IsDone" @onchange="@(() => CheckBoxChecked(todo))" />
+                <span class="@((todo.IsDone ? "completed" : ""))">@todo.Title</span>
+
+                @if (todo.IsDone)
+                {
+                    <button class="btn btn-outline-danger btn sm" title="Obriši" @onclick="(() => DeleteTask(todo))">
+                        <span class="oi oi-trash"></span>
+                    </button>
+                }
+            </li>
+            }
+
+        </ul>
+    }
+

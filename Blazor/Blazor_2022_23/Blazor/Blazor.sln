@@ -3,17 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.WebAssembly", "Blazor.WebAssembly\Blazor.WebAssembly.csproj", "{51E9008F-17C6-462F-9310-3D8AB48A3AE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.WebAssembly", "Blazor.WebAssembly\Blazor.WebAssembly.csproj", "{51E9008F-17C6-462F-9310-3D8AB48A3AE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.ServerApp", "Blazor.ServerApp\Blazor.ServerApp.csproj", "{911C0B3A-A836-4935-90E9-B6CFACF3315C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.ServerApp", "Blazor.ServerApp\Blazor.ServerApp.csproj", "{911C0B3A-A836-4935-90E9-B6CFACF3315C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorWASM", "CalculatorWASM\CalculatorWASM.csproj", "{7F367D38-6FFE-4A8A-92E1-A87689202BCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculatorWASM", "CalculatorWASM\CalculatorWASM.csproj", "{7F367D38-6FFE-4A8A-92E1-A87689202BCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoWASM", "ToDoWASM\ToDoWASM.csproj", "{B2EDCE47-3907-473C-899E-8DF391BB41AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoWASM", "ToDoWASM\ToDoWASM.csproj", "{B2EDCE47-3907-473C-899E-8DF391BB41AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherForecastWASM", "WeatherForecastWASM\WeatherForecastWASM.csproj", "{9EB3CB7B-DC9D-40D4-90D9-788F78F55648}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherForecastWASM", "WeatherForecastWASM\WeatherForecastWASM.csproj", "{9EB3CB7B-DC9D-40D4-90D9-788F78F55648}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherForecastServer", "WeatherForecastServer\WeatherForecastServer.csproj", "{7BAEBA92-CCF9-4D4F-ADDD-7CC13B1724DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherForecastServer", "WeatherForecastServer\WeatherForecastServer.csproj", "{7BAEBA92-CCF9-4D4F-ADDD-7CC13B1724DD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoBlazorCoreHosted.Server", "ToDoBlazorCoreHosted\Server\ToDoBlazorCoreHosted.Server.csproj", "{DF451EB5-51F7-43BA-8831-6F2495F5316D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoBlazorCoreHosted.Client", "ToDoBlazorCoreHosted\Client\ToDoBlazorCoreHosted.Client.csproj", "{CEEFE778-7D78-424C-BA8E-3AD355416484}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDoBlazorCoreHosted.Shared", "ToDoBlazorCoreHosted\Shared\ToDoBlazorCoreHosted.Shared.csproj", "{6E57E97E-DC62-480C-B4B2-5E7AF9131AA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RockPaperScissorsWASM", "RockPaperScissorsWASM\RockPaperScissorsWASM.csproj", "{4894B6F3-2CAF-4B53-9A5D-F72B049FE432}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +53,22 @@ Global
 		{7BAEBA92-CCF9-4D4F-ADDD-7CC13B1724DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BAEBA92-CCF9-4D4F-ADDD-7CC13B1724DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BAEBA92-CCF9-4D4F-ADDD-7CC13B1724DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF451EB5-51F7-43BA-8831-6F2495F5316D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF451EB5-51F7-43BA-8831-6F2495F5316D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF451EB5-51F7-43BA-8831-6F2495F5316D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF451EB5-51F7-43BA-8831-6F2495F5316D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEEFE778-7D78-424C-BA8E-3AD355416484}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEEFE778-7D78-424C-BA8E-3AD355416484}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEEFE778-7D78-424C-BA8E-3AD355416484}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEEFE778-7D78-424C-BA8E-3AD355416484}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E57E97E-DC62-480C-B4B2-5E7AF9131AA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E57E97E-DC62-480C-B4B2-5E7AF9131AA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E57E97E-DC62-480C-B4B2-5E7AF9131AA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E57E97E-DC62-480C-B4B2-5E7AF9131AA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4894B6F3-2CAF-4B53-9A5D-F72B049FE432}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4894B6F3-2CAF-4B53-9A5D-F72B049FE432}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4894B6F3-2CAF-4B53-9A5D-F72B049FE432}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4894B6F3-2CAF-4B53-9A5D-F72B049FE432}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,98 @@
+﻿@page "/"
+@using System.Timers
+@using RockPaperScissorsWASM.Models
+@implements IDisposable
+
+<h1>Rock, Paper, Scissors</h1>
+<hr />
+
+<button class="btn btn-info" @onclick="PlayAgain">Igraj ponovno</button>
+<br />
+<br />
+@if (!string.IsNullOrEmpty(resultMessage))
+{
+    <h3 style="color:@resultMessageColor">@resultMessage</h3>
+}
+
+<div style="display:flex; justify-content: center; margin-bottom: 20px">
+    <img src=@opponentHand.Image class="image" />
+</div>
+
+<div style="display:flex; justify-content: space-around;">
+    @foreach (var hand in hands)
+    {
+        <img src="@hand.Image" class="image selectable-image" @onclick="@(() => SelectHand(hand))" />
+    }
+</div>
+
+@code
+{
+    Timer timer;
+    Hand opponentHand;
+    string resultMessage = string.Empty;
+    string resultMessageColor = string.Empty;
+    int indexOpponentHand = 0;
+
+    //popis svih opcija
+    List<Hand> hands = new List<Hand>()
+{
+        new Hand{Selection = OptionRPS.Paper,LosesAgainst = OptionRPS.Scissors, WinsAgainst= OptionRPS.Rock, Image="/images/paper.jpg"},
+        new Hand{Selection = OptionRPS.Rock,LosesAgainst = OptionRPS.Paper, WinsAgainst= OptionRPS.Scissors, Image="/images/rock.jpg"},
+        new Hand{Selection = OptionRPS.Scissors,LosesAgainst = OptionRPS.Rock, WinsAgainst= OptionRPS.Paper, Image="/images/scissors.jpg"}
+    };
+
+    protected override void OnInitialized()
+    {
+        //na početku postavimo da je protivnikov odabir prvi iz liste
+        opponentHand = hands[0];
+
+        //inicijalizacija timera
+        timer = new Timer();
+        timer.Interval = 100;
+        timer.Elapsed += TimerOnElapsed;
+        timer.Start();
+    }
+
+    //kod svakog okidanja timera pomičemo se po mogućim odabirima
+    private void TimerOnElapsed(object sender, ElapsedEventArgs e)
+    {
+        indexOpponentHand = (indexOpponentHand + 1) % hands.Count;
+        opponentHand = hands[indexOpponentHand];
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        if (timer != null)
+            timer.Dispose();
+    }
+
+    //metoda koja se pozove kad odaberemo
+    private void SelectHand(Hand hand)
+    {
+        timer.Stop();
+        var result = hand.PlayAgainst(opponentHand);
+        if (result == GameStatus.Victory)
+        {
+            resultMessage = "Pobjeda";
+            resultMessageColor = "green";
+        }
+        else if (result == GameStatus.Loss)
+        {
+            resultMessage = "Gubitak";
+            resultMessageColor = "red";
+        }
+        else
+        {
+            resultMessage = "Izjednačeno";
+            resultMessageColor = "black";
+        }
+    }
+
+    //ponovno pokretanje igre
+    private void PlayAgain()
+    {
+        timer.Start();
+        resultMessage = string.Empty;
+    }
+}
